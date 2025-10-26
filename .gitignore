@@ -1,0 +1,37 @@
+# =====================================
+# Node.js / Express / MongoDB Git Ignore
+# =====================================
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Logs and temp files
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+tmp/
+temp/
+cache/
+
+# IDE / OS junk
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build and dist outputs
+dist/
+build/
+
+# Backups and test folders
+backups/
+__MACOSX/
+
