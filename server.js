@@ -56,11 +56,19 @@ const upload = multer({
 });
 
 // MongoDB connection
-const MONGODB_URI = "mongodb+srv://graphico:amit1234@cluster0.wocfdcj.mongodb.net/graphico?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.error("Missing MONGODB_URI environment variable. Configure it before starting the server.");
+    process.exit(1);
+}
 
 mongoose.connect(MONGODB_URI)
-.then(() => console.log("✅ CONNECTED TO MONGODB ATLAS"))
-.catch(err => console.log("❌ MongoDB error:", err.message));
+.then(() => console.log("Connected to MongoDB Atlas"))
+.catch(err => {
+    console.error("MongoDB connection failed:", err.message);
+    process.exit(1);
+});
 
 // Enhanced Database Schemas
 const quoteSchema = new mongoose.Schema({
