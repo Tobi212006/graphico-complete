@@ -19,12 +19,19 @@ The repository contains a Node.js-based backend and MongoDB integration. Check t
 
 1. Install a supported Node.js LTS release.
 2. Clone this repository and inspect the available project folders.
-3. Install dependencies in the folder containing the relevant `package.json`:
+3. Install dependencies from the repository root:
    ```bash
    npm install
    ```
-4. Configure the database connection using an environment variable such as `MONGODB_URI`. Keep real credentials in a local `.env` file that is excluded from Git.
-5. Start the backend using the script defined in that folder's `package.json`.
+4. Create your local environment file:
+   ```bash
+   cp .env.example .env
+   ```
+   Set `MONGODB_URI` to a database you control. The example defaults to a local MongoDB instance. Adjust `CORS_ORIGIN` to the frontend origin used in your development setup.
+5. Start the backend:
+   ```bash
+   npm start
+   ```
 
 If the repository contains more than one server entry point, use the one documented by its package scripts rather than starting both.
 
@@ -48,3 +55,11 @@ If the repository contains more than one server entry point, use the one documen
 ## About
 
 This project is part of my learning journey as a BSc Computer Science student. It is intended for academic demonstration and continued development, not as a production service.
+
+## Known limitations before deployment
+
+- The current backend does not yet implement verified administrator authentication/authorization. Do not expose admin or dashboard endpoints publicly.
+- File upload validation currently relies partly on the client-provided MIME type; add content-based validation and malware scanning before accepting untrusted uploads in production.
+- Review request validation, rate limiting, error responses, upload access controls and data retention before deployment.
+- A MongoDB credential was previously present in source history. It has been removed from the current server file, but the database owner must rotate/revoke that credential. A source-file change does not erase it from Git history.
+- No claim is made that the app is production-ready or fully security-tested.
