@@ -35,3 +35,10 @@ build/
 backups/
 __MACOSX/
 
+
+# User-uploaded files and local runtime data
+uploads/
+
+# Allow the safe placeholder template only
+.env.*
+!.env.example
