@@ -55,12 +55,20 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-// MongoDB connection
-const MONGODB_URI = "mongodb+srv://graphico:amit1234@cluster0.wocfdcj.mongodb.net/graphico?retryWrites=true&w=majority&appName=Cluster0";
+// MongoDB connection: configure MONGODB_URI in the local environment.
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+    console.error("MONGODB_URI is missing. Copy .env.example to .env and configure it.");
+    process.exit(1);
+}
 
 mongoose.connect(MONGODB_URI)
-.then(() => console.log("✅ CONNECTED TO MONGODB ATLAS"))
-.catch(err => console.log("❌ MongoDB error:", err.message));
+    .then(() => console.log("Connected to MongoDB Atlas"))
+    .catch((err) => {
+        console.error("MongoDB connection failed:", err.message);
+        process.exit(1);
+    });
 
 // Enhanced Database Schemas
 const quoteSchema = new mongoose.Schema({
@@ -160,7 +168,7 @@ app.get("/api/health", (req, res) => {
     res.json({ 
         status: "OK", 
         message: "Graphico Server is running!",
-        database: "MongoDB Connected",
+        database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
         uploads: "Ready",
         timestamp: new Date().toISOString()
     });
@@ -467,10 +475,10 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log("🚀 GRAPHICO SERVER STARTED on http://localhost:" + PORT);
-    console.log("📁 Upload directory: " + path.join(__dirname, "uploads"));
-    console.log("💾 File uploads ready - Max 25MB, 5 files");
-    console.log("📊 MongoDB: Connected");
-    console.log("🛠️  System: Operational");
+mongoose.connection.once("open", () => {
+    app.listen(PORT, () => {
+        console.log("Graphico server started on http://localhost:" + PORT);
+        console.log("Upload directory: " + path.join(__dirname, "uploads"));
+        console.log("File uploads ready - Max 25MB, 5 files");
+    });
 });
