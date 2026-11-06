@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 ﻿const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -8,7 +10,20 @@ const fs = require("fs");
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+app.use(cors({
+    origin(origin, callback) {
+        // Allow requests without an Origin header (for local tools and server-to-server calls).
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error("Origin is not allowed by CORS"));
+    }
+}));
 app.use(express.json());
 app.use(express.static("."));
 
