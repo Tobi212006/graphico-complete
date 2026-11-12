@@ -68,6 +68,7 @@ Never commit either local `.env` file.
 
 - [Architecture overview](docs/ARCHITECTURE.md)
 - [End-to-end process map](docs/PROCESS_MAP.md)
+- [Cleanup and deployment security audit](docs/CLEANUP_AND_DEPLOYMENT_AUDIT.md)
 
 ## Security and known limitations
 
