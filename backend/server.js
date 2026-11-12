@@ -50,8 +50,12 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-// MongoDB connection
-const MONGODB_URI = 'mongodb+srv://graphico:amit1234@cluster0.wocfdcj.mongodb.net/graphico?retryWrites=true&w=majority&appName=Cluster0';
+// MongoDB connection: keep credentials in the local environment, never in source code.
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+    console.error('MONGODB_URI is missing. Configure it in your local .env file.');
+    process.exit(1);
+}
 
 mongoose.connect(MONGODB_URI)
 .then(() => console.log('✅ CONNECTED TO MONGODB ATLAS'))
